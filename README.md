@@ -1,2 +1,2 @@
-# HarmonicRadarClassification
-Classifying electronics using harmonic radar signals and machine learning
+# Harmonic_Radar_Fingerprinting
+ Fingerprinting devices using harmonic radar and machine learning
