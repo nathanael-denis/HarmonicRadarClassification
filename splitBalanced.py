@@ -4,7 +4,7 @@ import shutil
 
 def split_dataset_balanced(input_dir, output_dir, train_ratio=0.6, val_ratio=0.2, test_ratio=0.2):
     """
-    Splits the dataset into train, validation, and test sets with balanced classes.
+    Splits the dataset into train, validation, and test sets with balanced classes (downsampling).
 
     Parameters:
     - input_dir (str): Path to the input dataset directory.
