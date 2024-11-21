@@ -20,7 +20,12 @@ This script is designed for **distributed training** of deep learning models usi
 - Centralized training for testing (workstationTrainingUSB.py)
 - ResNet architectures for USB signal classification.
 - Metrics calculation : precision, recall, F1-score, and confusion matrix generation.
-  
+
+The workflow is as follows: 
+1) iaToRichImages.py generates grayscale images from IQ samples (FFT size and batch size can be adjusted, and are by default the same as in the paper)
+2) splitBalanced and splitUnbalanced will generate the datasets for training, validation and testing; splitBalanced will also downsample majority classes (Scenario 2)
+3) centralizedTraining ( or distributed) will train the model on the resulting datasets.
+   
 **Usage:**
 ```bash
 python distributedTrainingUSB.py
