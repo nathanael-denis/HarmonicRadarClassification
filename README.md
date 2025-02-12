@@ -1,6 +1,6 @@
 # Harmonic Signal Fingerprinting with Deep Learning
 
-This repository contains the tools and scripts developed for the **Harmonic Signal Fingerprinting** project, which explores the use of harmonic radar and deep learning techniques to classify signals from devices and detect anomalies like hardware Trojans.
+This repository contains the tools and scripts developed for the **Harmonic Signal Fingerprinting** project, which explores the use of harmonic radar and deep learning techniques to classify signals from devices and detect anomalies like hardware trojans. In particular, the project has been tested on USB devices, the main attack vector against cyber-physical system.
 
 ## Overview
 
