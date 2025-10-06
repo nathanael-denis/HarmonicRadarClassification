@@ -32,11 +32,11 @@ This repository implements **harmonic radar fingerprinting** for USB and electro
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone [your-repo-url]
+   git clone https://github.com/nathanael-denis/HarmonicRadarClassification.git
 
 2. Install requirements
    ```bash
-   pip install numpy scipy matplotlib gnuradio scikit-learn
+   pip install torch torchvision matplotlib scikit-learn numpy scipy opencv-python pillow
 
 Workflow
 
@@ -44,23 +44,25 @@ Workflow
 
 Place IQ samples in IQ samples/ or alternatively, use GNU Radio scripts to capture new data.
 
-Preprocessing:
+- Preprocessing:
 
 Use IQtoSpectrograms.py to generate spectrograms from the IQ data. IQtoSpectrograms will take .iq files in the subdirectory of 
 IQ samples and generate spectrograms with the default parameters of the file.
 
-Data splitting: For testing without any data augmentation (Electromagnetic noise or angle), run splitBalanced.py or splitUnbalanced.py.
+- Data splitting: 
+
+For testing without any data augmentation (Electromagnetic noise or angle), run splitBalanced.py or splitUnbalanced.py.
 splitBalanced.py will balance the classes, which is of interest in some scenarios (like testing 16 legitimate USBs against 3 BadUSB with similar data collection)
 splitUnbalanced.py will use all the available images regardless of the number per class.
 If you apply data augmentation, the script angle.py or ElectromagneticNoise.py will handle splitting; there is no need to apply the Data splitting step.
 
-Training/Testing:
+- Training/Testing:
 
 Run trainingAndTesting.py for standard evaluation.
 Use trainingAndTestingOOD.py to test model robustness in the out-of-distribution (OOD) scenario. 
-Both scripts will run similarly, but trainingAndTestingOOD.py will also consider the dataset ood (in addition to test, val, and train)
+Both scripts will run similarly, but trainingAndTestingOOD.py will also consider the dataset OOD (in addition to test, val, and train)
 
-Optional - Data augmentation
+- Optional - Data augmentation
 
 This part aims to further strengthen the classifier against electromagnetic noise, either from the environment or active obfuscation, and also account for the minimal angle and distance changes.
 angle.py will apply an angle transformation framework to emulate changes in angle and distance (both are related in practice). Testing will be performed on augmented data, both with seen data for baseline comparison and on data augmented with angles that the classifier did not see during training (OOD)
