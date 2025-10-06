@@ -1,31 +1,68 @@
-# Harmonic Signal Fingerprinting with Deep Learning
+# Harmonic Radar Fingerprinting for USB/Electronic Devices
 
-This repository contains the tools and scripts developed for the **Harmonic Signal Fingerprinting** project, which explores the use of harmonic radar and deep learning techniques to classify signals from devices and detect anomalies like hardware trojans. In particular, the project has been tested on USB devices, the main attack vector against cyber-physical system.
+## Project Overview
+This repository implements **harmonic radar fingerprinting** for USB and electronic devices. The approach leverages electromagnetic emissions (IQ data) to uniquely identify or classify devices based on their unintentional radio-frequency (RF) signatures.
 
-## Overview
-
-The project combines signal processing and machine learning to create a robust system for analyzing harmonic signals, transforming raw IQ data into informative images, and training deep learning models for classification tasks. This repository is organized to support the full pipeline, from data preparation to distributed training.
+---
 
 ## Repository Structure
+   File/Folder            | Description                                                                                     |
+ |------------------------|-------------------------------------------------------------------------------------------------|
+ | **Data/**              | Contains all results from scenario testing. |
+ | **GNU Radio/**         | GNU Radio Companion (.grc) files for data acquisition.                     
+ | **IQ samples/**        | Raw IQ (In-phase/Quadrature) data samples from the experimental campaign.                            |
+ | **ElectromagneticNoise.py** | Script for analyzing or simulating electromagnetic noise from devices.                        |
+ | **IQtoSpectrograms.py**     | Converts IQ data into spectrograms for visualization and analysis.                            |
+ | **angle.py**           | Handles angle-of-arrival estimation or phase analysis for localization/fingerprinting.         |
+ | **splitBalanced.py**   | Splits datasets into balanced subsets (e.g., for training/testing).                            |
+ | **splitUnbalanced.py** | Splits datasets without balancing (e.g., for real-world or imbalanced scenarios).              |
+ | **trainingAndTesting.py**  | Core script for model training and evaluation.                                                 |
+ | **trainingAndTestingOOD.py** | Training/testing with out-of-distribution (OOD) data for robustness evaluation.               |
 
-### Data
-The results of the experimental campaign for the different scenarios considered.
+---
 
-### GNU Radio
-Contains GNU Radio workflow for emitting (TX), then capturing (RX) and processing harmonic radar signals. The workflow is used to interface with hardware (HackRF and USRP) and capture IQ data in real-time.
+## Key Features
+- **Data Collection:** Captures IQ samples from USB/device emissions.
+- **Signal Processing:** Uses GNU Radio for real-time or offline processing.
+- **Feature Extraction:** Converts IQ data to spectrograms for analysis.
+- **Model Training:** Includes scripts for balanced/unbalanced dataset splits and OOD evaluation.
 
-### distributedTrainingUSB.py
-This script is designed for **distributed training** of deep learning models using PyTorch. It supports:
-- Multi-GPU training with distributed data parallelism (distributedTrainingUSB.py).
-- Centralized training for testing (workstationTrainingUSB.py)
-- ResNet architectures for USB signal classification.
-- Metrics calculation : precision, recall, F1-score, and confusion matrix generation.
+---
 
-The workflow is as follows: 
-1) iaToRichImages.py generates grayscale images from IQ samples (FFT size and batch size can be adjusted, and are by default the same as in the paper)
-2) splitBalanced and splitUnbalanced will generate the datasets for training, validation and testing; splitBalanced will also downsample majority classes (Scenario 2)
-3) centralizedTraining ( or distributed) will train the model on the resulting datasets.
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone [your-repo-url]
+
+2. Install requirements
+   ```bash
+   pip install numpy scipy matplotlib gnuradio scikit-learn
+
+Workflow
+
+**Data Collection**:
+
+Place IQ samples in IQ samples/ or alternatively, use GNU Radio scripts to capture new data.
+
+Preprocessing:
+
+Use IQtoSpectrograms.py to generate spectrograms from the IQ data. IQtoSpectrograms will take .iq files in the subdirectory of 
+IQ samples and generate spectrograms with the default parameters of the file.
+
+Data splitting: For testing without any data augmentation (Electromagnetic noise or angle), run splitBalanced.py or splitUnbalanced.py.
+splitBalanced.py will balance the classes, which is of interest in some scenarios (like testing 16 legitimate USBs against 3 BadUSB with similar data collection)
+splitUnbalanced.py will use all the available images regardless of the number per class.
+If you apply data augmentation, the script angle.py or ElectromagneticNoise.py will handle splitting; there is no need to apply the Data splitting step.
+
+Training/Testing:
+
+Run trainingAndTesting.py for standard evaluation.
+Use trainingAndTestingOOD.py to test model robustness in the out-of-distribution (OOD) scenario. 
+Both scripts will run similarly, but trainingAndTestingOOD.py will also consider the dataset ood (in addition to test, val, and train)
+
+Optional - Data augmentation
+
+This part aims to further strengthen the classifier against electromagnetic noise, either from the environment or active obfuscation, and also account for the minimal angle and distance changes.
+angle.py will apply an angle transformation framework to emulate changes in angle and distance (both are related in practice). Testing will be performed on augmented data, both with seen data for baseline comparison and on data augmented with angles that the classifier did not see during training (OOD)
+
    
-**Usage:**
-```bash
-python distributedTrainingUSB.py
