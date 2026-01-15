@@ -2,7 +2,7 @@
 
 ## Project Overview
 This repository implements **harmonic radar fingerprinting** for USB and electronic devices. The approach leverages electromagnetic emissions (IQ data) to uniquely identify or classify devices based on their unintentional radio-frequency (RF) signatures.
-
+All images with the parameters specified in the paper are available at https://figshare.com/s/859926cd52993da5f7f6.
 ---
 
 ## Repository Structure
